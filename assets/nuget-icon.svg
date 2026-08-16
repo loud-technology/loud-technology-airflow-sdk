@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="512" height="512" viewBox="0 0 512 512" role="img" aria-labelledby="title description">
+  <title id="title">loud-technology</title>
+  <description id="description">A minimal audio waveform symbol for loud-technology.</description>
+  <defs>
+    <linearGradient id="brand" x1="56" y1="256" x2="456" y2="256" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#7C3AED" />
+      <stop offset="0.42" stop-color="#4F6FF8" />
+      <stop offset="0.72" stop-color="#16B8D4" />
+      <stop offset="1" stop-color="#18C58F" />
+    </linearGradient>
+  </defs>
+  <g fill="url(#brand)">
+    <rect x="56" y="216" width="64" height="80" rx="32" />
+    <rect x="140" y="148" width="64" height="216" rx="32" />
+    <rect x="224" y="76" width="64" height="360" rx="32" />
+    <rect x="308" y="130" width="64" height="252" rx="32" />
+    <rect x="392" y="196" width="64" height="120" rx="32" />
+  </g>
+</svg>

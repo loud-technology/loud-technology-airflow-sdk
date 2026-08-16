@@ -1,0 +1,55 @@
+
+#nullable enable
+
+namespace Loud.Technology.Airflow.Sdk
+{
+    /// <summary>
+    /// DAG Run Collection serializer for responses.
+    /// </summary>
+    public sealed partial class DAGRunCollectionResponse
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("dag_runs")]
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required global::System.Collections.Generic.IList<global::Loud.Technology.Airflow.Sdk.DAGRunResponse> DagRuns { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonPropertyName("total_entries")]
+        [global::System.Text.Json.Serialization.JsonRequired]
+        public required int TotalEntries { get; set; }
+
+        /// <summary>
+        /// Additional properties that are not explicitly defined in the schema
+        /// </summary>
+        [global::System.Text.Json.Serialization.JsonExtensionData]
+        public global::System.Collections.Generic.IDictionary<string, object> AdditionalProperties { get; set; } = new global::System.Collections.Generic.Dictionary<string, object>();
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DAGRunCollectionResponse" /> class.
+        /// </summary>
+        /// <param name="dagRuns"></param>
+        /// <param name="totalEntries"></param>
+#if NET7_0_OR_GREATER
+        [global::System.Diagnostics.CodeAnalysis.SetsRequiredMembers]
+#endif
+        public DAGRunCollectionResponse(
+            global::System.Collections.Generic.IList<global::Loud.Technology.Airflow.Sdk.DAGRunResponse> dagRuns,
+            int totalEntries)
+        {
+            this.DagRuns = dagRuns ?? throw new global::System.ArgumentNullException(nameof(dagRuns));
+            this.TotalEntries = totalEntries;
+        }
+
+        /// <summary>
+        /// Initializes a new instance of the <see cref="DAGRunCollectionResponse" /> class.
+        /// </summary>
+        public DAGRunCollectionResponse()
+        {
+        }
+
+    }
+}

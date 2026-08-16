@@ -1,0 +1,59 @@
+{
+  "Examples": [
+    {
+      "Order": 1,
+      "Title": "Get Config",
+      "Slug": "get-config",
+      "Description": "Generated from OpenAPI examples.",
+      "Language": "csharp",
+      "Code": "using var client = AirflowClient.CreateFromEnvironment();\nvar response = await client.Config.GetConfigAsync();\n\n// Example response:\n// \u0022[core]\\ndags_folder = /opt/airflow/dags\\nbase_log_folder = /opt/airflow/logs\\n\\n[smtp]\\nsmtp_host = localhost\\nsmtp_mail_from = airflow@example.com\\n\u0022",
+      "Format": "sdk",
+      "OperationId": "get_config",
+      "Setup": "This example assumes \u0060using Loud.Technology.Airflow.Sdk;\u0060 is in scope and a configured credential environment variable is set: \u0060AIRFLOW_API_TOKEN\u0060."
+    },
+    {
+      "Order": 2,
+      "Title": "Get Config Value",
+      "Slug": "get-config-value",
+      "Description": "Generated from OpenAPI examples.",
+      "Language": "http",
+      "Code": "### Get Config Value\n# @name get_config_value\nGET {{host}}/api/v2/config/section/{{section}}/option/{{option}}\nAuthorization: Bearer {{token}}\naccept: */*\nAccept: application/json, text/plain\n\n## Responses\n# 200\n# Description: Successful Response\n# Content-Type: application/json, text/plain\n# 401\n# Description: Unauthorized\n# Content-Type: application/json\n# 403\n# Description: Forbidden\n# Content-Type: application/json\n# 404\n# Description: Not Found\n# Content-Type: application/json\n# 406\n# Description: Not Acceptable\n# Content-Type: application/json\n# 422\n# Description: Validation Error\n# Content-Type: application/json",
+      "Format": "http",
+      "OperationId": "get_config_value",
+      "Setup": null
+    },
+    {
+      "Order": 3,
+      "Title": "Experimental: Wait for a dag run to complete, and return task results if requested.",
+      "Slug": "wait-dag-run-until-finished",
+      "Description": "\uD83D\uDEA7 This is an experimental endpoint and may change or be removed without notice.Successful response are streamed as newline-delimited JSON (NDJSON). Each line is a JSON object representing the DAG run state.",
+      "Language": "http",
+      "Code": "### Experimental: Wait for a dag run to complete, and return task results if requested.\n# @name wait_dag_run_until_finished\nGET {{host}}/api/v2/dags/{{dag_id}}/dagRuns/{{dag_run_id}}/wait?interval={{interval}}\u0026result={{result}}\nAuthorization: Bearer {{token}}\nAccept: application/json, application/x-ndjson\n\n## Responses\n# 200\n# Description: Successful Response\n# Content-Type: application/json, application/x-ndjson\n# 401\n# Description: Unauthorized\n# Content-Type: application/json\n# 403\n# Description: Forbidden\n# Content-Type: application/json\n# 404\n# Description: Not Found\n# Content-Type: application/json\n# 422\n# Description: Validation Error\n# Content-Type: application/json",
+      "Format": "http",
+      "OperationId": "wait_dag_run_until_finished",
+      "Setup": null
+    },
+    {
+      "Order": 4,
+      "Title": "Get Dag Source",
+      "Slug": "get-dag-source",
+      "Description": "Get source code using file token.",
+      "Language": "http",
+      "Code": "### Get Dag Source\n# @name get_dag_source\nGET {{host}}/api/v2/dagSources/{{dag_id}}?version_number={{version_number}}\nAuthorization: Bearer {{token}}\naccept: */*\nAccept: application/json, text/plain\n\n## Responses\n# 200\n# Description: Successful Response\n# Content-Type: application/json, text/plain\n# 400\n# Description: Bad Request\n# Content-Type: application/json\n# 401\n# Description: Unauthorized\n# Content-Type: application/json\n# 403\n# Description: Forbidden\n# Content-Type: application/json\n# 404\n# Description: Not Found\n# Content-Type: application/json\n# 406\n# Description: Not Acceptable\n# Content-Type: application/json\n# 422\n# Description: Validation Error\n# Content-Type: application/json",
+      "Format": "http",
+      "OperationId": "get_dag_source",
+      "Setup": null
+    },
+    {
+      "Order": 5,
+      "Title": "Get Log",
+      "Slug": "get-log",
+      "Description": "Get logs for a specific task instance.",
+      "Language": "http",
+      "Code": "### Get Log\n# @name get_log\nGET {{host}}/api/v2/dags/{{dag_id}}/dagRuns/{{dag_run_id}}/taskInstances/{{task_id}}/logs/{{try_number}}?full_content=false\u0026map_index=-1\u0026token={{token}}\nAuthorization: Bearer {{token}}\naccept: */*\nAccept: application/json, application/x-ndjson\n\n## Responses\n# 200\n# Description: Successful Response\n# Content-Type: application/json, application/x-ndjson\n# 401\n# Description: Unauthorized\n# Content-Type: application/json\n# 403\n# Description: Forbidden\n# Content-Type: application/json\n# 404\n# Description: Not Found\n# Content-Type: application/json\n# 422\n# Description: Validation Error\n# Content-Type: application/json",
+      "Format": "http",
+      "OperationId": "get_log",
+      "Setup": null
+    }
+  ]
+}

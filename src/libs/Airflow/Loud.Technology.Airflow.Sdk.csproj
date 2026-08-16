@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AssemblyName>Loud.Technology.Airflow.Sdk</AssemblyName>
+    <RootNamespace>Loud.Technology.Airflow.Sdk</RootNamespace>
+  </PropertyGroup>
+  <PropertyGroup Label="NuGet">
+    <PackageId>Airflow</PackageId>
+    <Title>Apache Airflow .NET SDK</Title>
+    <Description>Modern, strongly typed .NET SDK for the Apache Airflow public REST API, generated from the official OpenAPI specification with AutoSDK.</Description>
+    <PackageTags>apache;airflow;workflow;orchestration;dag;api;client;sdk;dotnet;openapi;autosdk</PackageTags>
+    <PackageProjectUrl>https://github.com/loud-technology/loud-technology-airflow-sdk</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/loud-technology/loud-technology-airflow-sdk.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+</Project>

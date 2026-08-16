@@ -1,0 +1,157 @@
+name: Build, test, and publish
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*.*.*'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: dotnet-${{ github.ref }}
+  cancel-in-progress: ${{ !startsWith(github.ref, 'refs/tags/') }}
+
+env:
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  CONFIGURATION: Release
+  SOLUTION: Loud.Technology.Airflow.Sdk.slnx
+  PROJECT: src/libs/Airflow/Loud.Technology.Airflow.Sdk.csproj
+
+jobs:
+  build-test-pack:
+    name: Build, test, and pack
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out source and tags
+        uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Restore
+        run: dotnet restore "$SOLUTION"
+
+      - name: Build
+        run: dotnet build "$SOLUTION" --configuration "$CONFIGURATION" --no-restore -p:ContinuousIntegrationBuild=true
+
+      - name: Test
+        run: dotnet test "$SOLUTION" --configuration "$CONFIGURATION" --no-build --logger GitHubActions
+
+      - name: Pack
+        run: dotnet pack "$PROJECT" --configuration "$CONFIGURATION" --no-build --output artifacts -p:ContinuousIntegrationBuild=true
+
+      - name: Upload package artifacts
+        uses: actions/upload-artifact@v7
+        with:
+          name: nuget-packages
+          path: |
+            artifacts/*.nupkg
+            artifacts/*.snupkg
+          if-no-files-found: error
+
+  publish-github-packages:
+    name: Publish to GitHub Packages
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-test-pack
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: artifacts
+
+      - name: Configure loud-technology GitHub Packages source
+        shell: bash
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ github.token }}
+        run: |
+          dotnet nuget add source \
+            --username "${GITHUB_ACTOR}" \
+            --password "${GITHUB_PACKAGES_TOKEN}" \
+            --store-password-in-clear-text \
+            --name github-packages \
+            "https://nuget.pkg.github.com/${GITHUB_REPOSITORY_OWNER}/index.json"
+
+      - name: Publish package
+        shell: bash
+        env:
+          GITHUB_PACKAGES_TOKEN: ${{ github.token }}
+        run: |
+          for package in artifacts/*.nupkg; do
+            [[ "${package}" == *.snupkg ]] && continue
+            dotnet nuget push "${package}" \
+              --api-key "${GITHUB_PACKAGES_TOKEN}" \
+              --source github-packages \
+              --skip-duplicate
+          done
+
+  publish-nuget-org:
+    name: Publish to NuGet.org with Trusted Publishing
+    if: startsWith(github.ref, 'refs/tags/v')
+    needs: build-test-pack
+    runs-on: ubuntu-latest
+    environment: nuget-org
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Set up .NET
+        uses: actions/setup-dotnet@v6
+        with:
+          dotnet-version: '10.0.x'
+
+      - name: Download package artifacts
+        uses: actions/download-artifact@v8
+        with:
+          name: nuget-packages
+          path: artifacts
+
+      - name: Validate NuGet.org username
+        shell: bash
+        env:
+          NUGET_USER: ${{ vars.NUGET_USER }}
+        run: |
+          if [[ -z "${NUGET_USER}" ]]; then
+            echo "Set the NUGET_USER Actions variable to your NuGet.org profile username (not an email address)." >&2
+            exit 1
+          fi
+
+      - name: Exchange GitHub OIDC token for temporary NuGet API key
+        id: nuget-login
+        uses: NuGet/login@v1
+        with:
+          user: ${{ vars.NUGET_USER }}
+
+      - name: Publish package and symbols to NuGet.org
+        shell: bash
+        env:
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
+        run: |
+          for package in artifacts/*.nupkg; do
+            [[ "${package}" == *.snupkg ]] && continue
+            dotnet nuget push "${package}" \
+              --api-key "${NUGET_API_KEY}" \
+              --source "https://api.nuget.org/v3/index.json" \
+              --skip-duplicate
+          done
