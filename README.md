@@ -214,3 +214,10 @@ Licensed under the [MIT License](LICENSE). Apache Airflow is a separate project 
 
 <!-- EXAMPLES:START -->
 <!-- EXAMPLES:END -->
+
+
+## Acknowledgments
+
+![JetBrains logo](https://resources.jetbrains.com/storage/products/company/brand/logos/jetbrains.png)
+
+This project is supported by JetBrains through the [Open Source Support Program](https://jb.gg/OpenSourceSupport).
