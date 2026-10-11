@@ -4,12 +4,12 @@
     <RootNamespace>Loud.Technology.Airflow.Sdk.IntegrationTests</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
-    <PackageReference Include="MSTest" Version="4.3.3" />
+    <PackageReference Include="MSTest" Version="4.5.1" />
     <PackageReference Include="GitHubActionsTestLogger" Version="3.0.5">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="AwesomeAssertions" Version="9.5.0" />
+    <PackageReference Include="AwesomeAssertions" Version="9.6.0" />
   </ItemGroup>
   <ItemGroup Label="GlobalUsings">
     <Using Include="Microsoft.VisualStudio.TestTools.UnitTesting" />
